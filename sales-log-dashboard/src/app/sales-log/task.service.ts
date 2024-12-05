@@ -7,7 +7,7 @@ import { Task } from './sales-log.component'; // Adjust the path if necessary
   providedIn: 'root', // This makes the service available at the root level
 })
 export class TaskService {
-  private apiUrl = 'http://65.0.71.23:8000/tasks'; // Replace with your actual API URL
+  private apiUrl = 'http://52.66.248.184:5000/tasks'; // Replace with your actual API URL
 
   constructor(private http: HttpClient) {}
 
