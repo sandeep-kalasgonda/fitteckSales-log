@@ -1,0 +1,129 @@
+<div style="padding: 16px; max-width: 600px; margin: auto">
+  <form
+    [formGroup]="taskForm"
+    (ngSubmit)="onSubmit($event)"
+    style="display: flex; flex-direction: column; gap: 1px"
+  >
+    <div
+      class="header-container"
+      style="
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 4px;
+      "
+    >
+      <h2 style="font-size: 1.5rem; margin: 0">New Task</h2>
+      <div class="status-toggle-container">
+        <mat-button-toggle-group formControlName="status" appearance="legacy">
+          <mat-button-toggle value="Open">Open</mat-button-toggle>
+          <mat-button-toggle value="Closed">Closed</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Entity Name</mat-label>
+      <input matInput formControlName="entity" required />
+      <mat-error *ngIf="taskForm.get('entity')?.hasError('required')">
+        Entity Name is required.
+      </mat-error>
+    </mat-form-field>
+
+    <div style="display: flex; gap: 4px">
+      <mat-form-field appearance="outline" class="flex-grow">
+        <mat-label>Date</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker"
+          formControlName="date"
+          required
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="taskForm.get('date')?.hasError('required')">
+          Date is required.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="flex-grow">
+        <mat-label>Time</mat-label>
+        <mat-select formControlName="time" required>
+          <mat-option value="09:00">09:00 AM</mat-option>
+          <mat-option value="10:00">10:00 AM</mat-option>
+          <mat-option value="11:00">11:00 AM</mat-option>
+          <mat-option value="12:00">12:00 PM</mat-option>
+          <mat-option value="13:00">01:00 PM</mat-option>
+          <mat-option value="14:00">02:00 PM</mat-option>
+          <mat-option value="15:00">03:00 PM</mat-option>
+          <mat-option value="16:00">04:00 PM</mat-option>
+          <mat-option value="17:00">05:00 PM</mat-option>
+        </mat-select>
+        <mat-error *ngIf="taskForm.get('time')?.hasError('required')">
+          Time is required.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Task Type</mat-label>
+      <mat-select formControlName="taskType" required>
+        <mat-option value="Call"><mat-icon>phone</mat-icon> Call</mat-option>
+        <mat-option value="Meeting">
+          <mat-icon>event</mat-icon> Meeting
+        </mat-option>
+        <mat-option value="Video Call">
+          <mat-icon>videocam</mat-icon> Video Call
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="taskForm.get('taskType')?.hasError('required')">
+        Task Type is required.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Phone Number</mat-label>
+      <input
+        matInput
+        formControlName="phoneNumber"
+        type="tel"
+        required
+        pattern="^[0-9]{10}$"
+      />
+      <mat-error *ngIf="taskForm.get('phoneNumber')?.hasError('required')">
+        Phone Number is required.
+      </mat-error>
+      <mat-error *ngIf="taskForm.get('phoneNumber')?.hasError('pattern')">
+        Phone Number must be 10 digits.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Contact Person</mat-label>
+      <input matInput formControlName="contactPerson" required />
+      <mat-error *ngIf="taskForm.get('contactPerson')?.hasError('required')">
+        Contact Person is required.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Note (Optional)</mat-label>
+      <textarea matInput formControlName="notes" rows="2"></textarea>
+    </mat-form-field>
+
+    <div
+      class="button-group"
+      style="display: flex; justify-content: space-between; margin-top: 4px"
+    >
+      <button
+        mat-stroked-button
+        color="primary"
+        type="button"
+        (click)="onCancel()"
+      >
+        Cancel
+      </button>
+      <button mat-raised-button color="accent" type="submit">Save</button>
+    </div>
+  </form>
+</div>

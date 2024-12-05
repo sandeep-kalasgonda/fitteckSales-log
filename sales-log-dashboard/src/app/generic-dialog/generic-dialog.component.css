@@ -1,0 +1,22 @@
+.dialog-content {
+  min-width: 300px; /* Set a minimum width */
+  max-width: 400px; /* Set a maximum width */
+  padding: 16px; /* Add padding */
+}
+
+.full-width {
+  width: 100%; /* Ensure fields are full-width */
+}
+
+mat-form-field {
+  margin-bottom: 16px; /* Add bottom margin for spacing */
+}
+
+mat-dialog-title {
+  font-size: 1.5rem; /* Font size for the title */
+  text-align: center; /* Center align the title */
+}
+
+mat-dialog-actions {
+  justify-content: center; /* Center align the action buttons */
+}

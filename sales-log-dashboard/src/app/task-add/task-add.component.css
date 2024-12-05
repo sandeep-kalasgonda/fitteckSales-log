@@ -1,0 +1,90 @@
+/* General form styling */
+form {
+  max-width: 600px; /* Limit the width of the form */
+  margin: 20px auto; /* Center the form */
+  padding: 16px; /* Reduced padding */
+  border-radius: 8px;
+  background-color: #f9f9f9; /* Light background color */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Style for form fields */
+mat-form-field {
+  width: 100%; /* Make form fields take full width */
+  margin-bottom: 8px; /* Reduced space between fields */
+}
+
+/* Style for the button */
+button {
+  width: 100%; /* Make button take full width */
+  padding: 10px; /* Reduced padding for a more compact look */
+  font-size: 14px; /* Reduced font size */
+}
+
+/* Override Material styles if necessary */
+mat-label {
+  font-weight: bold !important; /* Make labels bold */
+  color: #3f51b5 !important; /* Primary color */
+}
+
+mat-error {
+  color: red !important; /* Error message color */
+}
+
+/* Optional: Style for the textarea */
+textarea {
+  min-height: 80px; /* Set a minimum height for the textarea */
+}
+
+/* Header container to align title and status toggle */
+.header-container {
+  display: flex;
+  justify-content: space-between; /* Space between title and toggle */
+  align-items: center; /* Center items vertically */
+  margin-bottom: 8px; /* Reduced space below the header */
+}
+
+.date-time-container {
+  display: flex; /* Align date and time fields in a row */
+  justify-content: space-between; /* Space them out */
+  gap: 4px; /* Added gap for better spacing */
+}
+
+/* Responsive full-width for form fields */
+.full-width {
+  width: 100%; /* Ensure full width for form fields */
+}
+
+/* Half-width for date and time fields */
+.half-width {
+  width: 48%; /* Set half width for date and time fields */
+}
+
+/* Align status toggle to the right */
+.status-toggle-container {
+  display: flex;
+  align-items: center; /* Center vertically */
+}
+
+/* Customize toggle button colors */
+.mat-button-toggle-checked {
+  background-color: rgb(232, 127, 35) !important; /* Set background color for selected state */
+  color: white !important; /* Set text color for selected state */
+}
+
+/* Animation for toggle selection */
+.mat-button-toggle-checked {
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+}
+
+/* Style for the button group */
+.button-group {
+  display: flex; /* Arrange buttons in a row */
+  justify-content: space-between; /* Align buttons to the ends */
+  margin-top: 16px; /* Reduced space above the button group */
+}
+
+/* Style for the datepicker toggle */
+.mat-datepicker-toggle {
+  margin-right: 4px; /* Reduced space between datepicker and the input */
+}

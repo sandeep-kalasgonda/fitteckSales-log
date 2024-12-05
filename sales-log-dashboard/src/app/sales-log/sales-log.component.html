@@ -1,0 +1,227 @@
+<mat-toolbar color="primary">
+  <span style="font-size: 1.5rem; font-weight: bold">SALES LOG</span>
+  <button
+    mat-raised-button
+    color="accent"
+    style="margin-left: auto"
+    (click)="openAddTaskDialog()"
+  >
+    New Task
+  </button>
+</mat-toolbar>
+
+<div style="padding: 16px">
+  <!-- Search Box -->
+  <div
+    style="
+      display: flex;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    "
+  >
+    <mat-form-field
+      appearance="outline"
+      style="flex: 1; min-width: 200px; margin-right: 8px"
+    >
+      <mat-label>Entity Name</mat-label>
+      <input
+        matInput
+        placeholder="Search"
+        [(ngModel)]="searchQuery"
+        (ngModelChange)="onSearchChange($event)"
+      />
+    </mat-form-field>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div *ngIf="loading" style="text-align: center; margin: 16px 0">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <!-- Selected Chips -->
+  <div style="margin-bottom: 16px; display: flex; flex-wrap: wrap">
+    <!-- Selected Task Types Chips -->
+    <mat-chip-list *ngIf="selectedTaskTypes.length > 0">
+      <mat-chip
+        *ngFor="let taskType of selectedTaskTypes"
+        removable
+        (removed)="removeTaskType(taskType)"
+      >
+        {{ taskType }}
+        <button mat-icon-button matChipRemove>
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip>
+    </mat-chip-list>
+
+    <!-- Selected Date Chips -->
+    <mat-chip-list *ngIf="selectedDateFilter">
+      <mat-chip removable (removed)="clearDateFilter()">
+        {{ selectedDateFilter }}
+        <button mat-icon-button matChipRemove>
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip>
+    </mat-chip-list>
+  </div>
+
+  <!-- Task Type Filter -->
+  <div
+    *ngIf="showTaskTypeFilter"
+    class="task-type-filter"
+    style="margin-top: 8px"
+  >
+    <mat-checkbox
+      *ngFor="let type of taskTypes"
+      [checked]="selectedTaskTypes.includes(type)"
+      (change)="toggleTaskTypeSelection(type)"
+      aria-label="{{ type }} checkbox"
+    >
+      {{ type }}
+    </mat-checkbox>
+  </div>
+
+  <!-- Table -->
+  <div style="overflow-x: auto">
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+      <!-- Date Column -->
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>
+          Date
+          <button
+            mat-icon-button
+            [matMenuTriggerFor]="dateFilterMenu"
+            aria-label="Date filter"
+          >
+            <mat-icon>filter_list</mat-icon>
+          </button>
+          <mat-menu #dateFilterMenu="matMenu">
+            <button mat-menu-item (click)="toggleDateFilter('today')">
+              Today
+            </button>
+            <button mat-menu-item (click)="toggleDateFilter('thisWeek')">
+              This Week
+            </button>
+            <button mat-menu-item (click)="toggleDateFilter('thisMonth')">
+              This Month
+            </button>
+            <button mat-menu-item (click)="clearDateFilter()">
+              Clear Filter
+            </button>
+          </mat-menu>
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.date }}</td>
+      </ng-container>
+
+      <!-- Entity Name Column -->
+      <ng-container matColumnDef="entity">
+        <th mat-header-cell *matHeaderCellDef>Entity Name</th>
+        <td mat-cell *matCellDef="let element">{{ element.entity }}</td>
+      </ng-container>
+
+      <!-- Task Type Column -->
+      <ng-container matColumnDef="taskType">
+        <th mat-header-cell *matHeaderCellDef>
+          Task Type
+          <button mat-icon-button [matMenuTriggerFor]="taskTypeMenu">
+            <mat-icon>filter_list</mat-icon>
+          </button>
+          <mat-menu #taskTypeMenu="matMenu">
+            <button mat-menu-item (click)="toggleTaskTypeSelection('Call')">
+              Call
+            </button>
+            <button mat-menu-item (click)="toggleTaskTypeSelection('Meeting')">
+              Meeting
+            </button>
+            <button
+              mat-menu-item
+              (click)="toggleTaskTypeSelection('Video Call')"
+            >
+              Video Call
+            </button>
+            <button mat-menu-item (click)="clearTaskTypeFilter()">
+              Clear Filter
+            </button>
+          </mat-menu>
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.taskType }}</td>
+      </ng-container>
+
+      <!-- Time Column -->
+      <ng-container matColumnDef="time">
+        <th mat-header-cell *matHeaderCellDef>Time</th>
+        <td mat-cell *matCellDef="let element">{{ element.time }}</td>
+      </ng-container>
+
+      <!-- Contact Person Column -->
+      <ng-container matColumnDef="contactPerson">
+        <th mat-header-cell *matHeaderCellDef>Contact Person</th>
+        <td mat-cell *matCellDef="let element">{{ element.contactPerson }}</td>
+      </ng-container>
+
+      <!-- Notes Column -->
+      <ng-container matColumnDef="notes">
+        <th mat-header-cell *matHeaderCellDef>Notes</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          <div>
+            <span
+              (click)="element.notes ? editNotes(i) : null"
+              style="cursor: pointer"
+            >
+              {{ element.notes || "" }}
+            </span>
+            <button
+              *ngIf="!element.notes"
+              mat-button
+              color="primary"
+              (click)="editNotes(i)"
+              style="margin-left: 8px"
+            >
+              + Add
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Status Column -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let element">
+          <button
+            mat-button
+            [ngStyle]="{
+              'background-color':
+                element.status === 'Open' ? '#f28b82' : '#a7c7e7',
+              color: 'white'
+            }"
+            (click)="toggleStatus(element)"
+          >
+            {{ element.status }}
+          </button>
+        </td>
+      </ng-container>
+
+      <!-- Options Column -->
+      <ng-container matColumnDef="options">
+        <th mat-header-cell *matHeaderCellDef>Options</th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="editTask(element)">Edit</button>
+            <button mat-menu-item (click)="duplicateTask(element)">
+              Duplicate
+            </button>
+            <button mat-menu-item (click)="deleteTask(element)">Delete</button>
+          </mat-menu>
+        </td>
+      </ng-container>
+
+      <!-- Header and Row Definitions -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+</div>
